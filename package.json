@@ -1,0 +1,22 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "chat app to mimic whatsapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GinaKui/chat-app.git"
+  },
+  "author": {
+    "name": "Gina Kui",
+    "email": "developerkui@outlook.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GinaKui/chat-app/issues"
+  },
+  "homepage": "https://github.com/GinaKui/chat-app#readme"
+}
