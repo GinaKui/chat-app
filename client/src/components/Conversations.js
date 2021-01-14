@@ -2,7 +2,7 @@ import React from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { useConversations } from '../contexts/ConversationsProvider'
 
-export default function Conversation() {
+export default function Conversations() {
   const { conversations, selectConversationIndex } = useConversations();
   return (
     <ListGroup variant="flush">
