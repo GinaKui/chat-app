@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { useContacts } from './ContactsProvider'
+import { useSocket } from './SocketProvider';
 
 const ConversationsContext = createContext();
 
@@ -12,12 +13,14 @@ export function ConversationsProvider({ id, children }) {
   const [conversations, setConversations] = useLocalStorage('conversations', []);
   const [selectedConversationIndex, setSelectedConversationIndex] = useState(0)
   const { contacts } = useContacts();
+  const socket = useSocket();
+
   const createConversation = (recipients) => {
     setConversations(prevConversatoins => {
       return [...prevConversatoins, { recipients, messages: [] }];
     })
   }
-  const addMessageToConversation = ({ recipients, text, sender }) => {
+  const addMessageToConversation = useCallback(({ recipients = [], text, sender }) => {
     setConversations(prevConversatoins => {
       let madeChange = false;
       const newMessage = { sender, text }
@@ -41,9 +44,24 @@ export function ConversationsProvider({ id, children }) {
         ]
       }
     })
-  };
+  }, [setConversations]);
+
+  useEffect(() => {
+    console.log('ConversationsProvider useEffect')
+    if(socket == null) return;
+    socket.on('receive-message', (data) => {
+      addMessageToConversation({...data})
+      console.log('hear from server')
+    })
+    //remove the event listener
+    return () => {
+      socket.off('receive-message')
+    }
+    //only change event listner when function change
+  }, [socket, addMessageToConversation])
 
   const sendMessage = (recipients, text) => {
+    socket.emit('send-message', { recipients, text });
     addMessageToConversation({recipients, text, sender: id})
   }
   const formattedConversations = conversations.map((conversation, index) => {
