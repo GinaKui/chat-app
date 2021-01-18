@@ -16,8 +16,8 @@ export function ConversationsProvider({ id, children }) {
   const socket = useSocket();
 
   const createConversation = (recipients) => {
-    setConversations(prevConversatoins => {
-      return [...prevConversatoins, { recipients, messages: [] }];
+    setConversations(prevConversations => {
+      return [...prevConversations, { recipients, messages: [] }];
     })
   }
 
@@ -51,7 +51,7 @@ export function ConversationsProvider({ id, children }) {
     console.log('ConversationsProvider useEffect')
     if(socket == null) return;
     socket.on('receive-message', (data) => {
-      addMessageToConversation({...data})
+      addMessageToConversation(data)
       console.log('hear from server')
     })
     //remove the event listener
@@ -74,6 +74,7 @@ export function ConversationsProvider({ id, children }) {
       const name = (contact && contact.name) || recipient
       return { id: recipient, name }
     })
+
     const messages = conversation.messages.map(message => {
       const contact = contacts.find(contact => {
         return contact.id === message.sender
@@ -84,7 +85,7 @@ export function ConversationsProvider({ id, children }) {
     })
 
     const selected = index === selectedConversationIndex;
-    return { ...conversations, messages, recipients, selected }
+    return { ...conversation, messages, recipients, selected }
   })
 
   const value = { 
@@ -102,7 +103,8 @@ export function ConversationsProvider({ id, children }) {
   )
 }
 
-function arrayEquality(a = [],b = []) {
+function arrayEquality(a,b) {
+  if(!Array.isArray(a) || !Array.isArray(b)) return false;
   if(a.length !== b.length) return false;
   a.sort();
   b.sort();
