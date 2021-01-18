@@ -20,11 +20,12 @@ export function ConversationsProvider({ id, children }) {
       return [...prevConversatoins, { recipients, messages: [] }];
     })
   }
-  const addMessageToConversation = useCallback(({ recipients = [], text, sender }) => {
-    setConversations(prevConversatoins => {
+
+  const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
+    setConversations(prevConversations => {
       let madeChange = false;
       const newMessage = { sender, text }
-      const newConversations = prevConversatoins.map(conversation => {
+      const newConversations = prevConversations.map(conversation => {
         if(arrayEquality(conversation.recipients, recipients)) {
           madeChange = true
           return {
@@ -39,7 +40,7 @@ export function ConversationsProvider({ id, children }) {
         return newConversations;
       } else {
         return [
-          ...prevConversatoins,
+          ...prevConversations,
           { recipients, messages: [newMessage] }
         ]
       }
@@ -64,6 +65,7 @@ export function ConversationsProvider({ id, children }) {
     socket.emit('send-message', { recipients, text });
     addMessageToConversation({recipients, text, sender: id})
   }
+
   const formattedConversations = conversations.map((conversation, index) => {
     const recipients = conversation.recipients.map(recipient => {
       const contact = contacts.find(contact => {
@@ -92,6 +94,7 @@ export function ConversationsProvider({ id, children }) {
     selectedConversation: formattedConversations[selectedConversationIndex],
     createConversation
   }
+
   return (
     <ConversationsContext.Provider value={value}>
       {children}
@@ -99,7 +102,7 @@ export function ConversationsProvider({ id, children }) {
   )
 }
 
-function arrayEquality(a,b) {
+function arrayEquality(a = [],b = []) {
   if(a.length !== b.length) return false;
   a.sort();
   b.sort();

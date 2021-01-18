@@ -8,7 +8,7 @@ export function useSocket() {
 }
 
 export function SocketProvider({ id, children }) {
-  const [socket, setSocket] = useState();
+  const [socket, setSocket] = useState(null);
   
   useEffect(() => {
     const newSocket = io(
