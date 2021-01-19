@@ -15,8 +15,6 @@ io.on('connection', socket => {
     recipients.forEach(recipient => {
       const newRecipients = recipients.filter(r => r!== recipient);
       newRecipients.push(id);
-      console.log('hear send-message event, new recipients are ' + newRecipients)
-      console.log('the id is '+ id) 
       socket.to(recipient).emit('receive-message', {
         recipients: newRecipients,
         sender: id,

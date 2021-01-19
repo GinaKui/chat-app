@@ -22,9 +22,6 @@ export function ConversationsProvider({ id, children }) {
   }
 
   const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
-    console.log('recipients ',recipients)
-    console.log('text ',text)
-    console.log('sender', sender)
     setConversations(prevConversations => {
       let madeChange = false;
       const newMessage = { sender, text }
@@ -51,7 +48,6 @@ export function ConversationsProvider({ id, children }) {
   }, [setConversations]);
 
   useEffect(() => {
-    console.log('ConversationsProvider useEffect')
     if(socket == null) return;
     socket.on('receive-message', addMessageToConversation)
     //remove the event listener
