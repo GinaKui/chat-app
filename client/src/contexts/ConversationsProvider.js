@@ -22,6 +22,9 @@ export function ConversationsProvider({ id, children }) {
   }
 
   const addMessageToConversation = useCallback(({ recipients, text, sender }) => {
+    console.log('recipients ',recipients)
+    console.log('text ',text)
+    console.log('sender', sender)
     setConversations(prevConversations => {
       let madeChange = false;
       const newMessage = { sender, text }
@@ -50,10 +53,7 @@ export function ConversationsProvider({ id, children }) {
   useEffect(() => {
     console.log('ConversationsProvider useEffect')
     if(socket == null) return;
-    socket.on('receive-message', (data) => {
-      addMessageToConversation(data)
-      console.log('hear from server')
-    })
+    socket.on('receive-message', addMessageToConversation)
     //remove the event listener
     return () => {
       socket.off('receive-message')
@@ -66,7 +66,8 @@ export function ConversationsProvider({ id, children }) {
     addMessageToConversation({recipients, text, sender: id})
   }
 
-  const formattedConversations = conversations.map((conversation, index) => {
+  const formattedConversations = conversations.map(
+    (conversation, index) => {
     const recipients = conversation.recipients.map(recipient => {
       const contact = contacts.find(contact => {
         return contact.id === recipient
