@@ -22,7 +22,7 @@ export default function useLocalStorage(localStorageKey, initialValue) {
       return initialValue;
     }
   });
-
+  //update value in localStorage
   useEffect(() => {
     localStorage.setItem(prefixedKey, JSON.stringify(value))
   }, [prefixedKey, value]);

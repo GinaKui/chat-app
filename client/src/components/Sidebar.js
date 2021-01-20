@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
@@ -22,31 +23,23 @@ export default function Sidebar({ id }) {
     setModalIsOpen(false);
   }
   return (
-    <div className="d-flex flex-column" style={{ maxWidth: '300px' }}>
-      <Tab.Container activeKey={activeKey} onSelect={setActiveKey}>
-        <Nav variant="tabs" className="justify-content-center">
-          <Nav.Item>
-            <Nav.Link eventKey={CONVERSATIONS_KEY}>conversations</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey={CONTACTS_KEY}>contacts</Nav.Link>
-          </Nav.Item>
-        </Nav>
-      <Tab.Content className="border-right overflow-auto flex-grow-1">
-        <Tab.Pane eventKey={CONVERSATIONS_KEY}>
-          <Conversations />
-        </Tab.Pane>
-        <Tab.Pane eventKey={CONTACTS_KEY}>
-          <Contacts />
-        </Tab.Pane>
-      </Tab.Content>
-      <div className="border-top border-right">
+    <div className="d-flex flex-column border-right" style={{ maxWidth: '300px' }}>
+      <div className="flex-grow-1">
+        <Tabs activeKey={activeKey} onSelect={setActiveKey} className="justify-content-center" >
+          <Tab eventKey={CONVERSATIONS_KEY} title="conversations">
+            <Conversations/>
+          </Tab>
+          <Tab eventKey={CONTACTS_KEY} title="contacts">
+            <Contacts/>
+          </Tab>         
+        </Tabs>
+      </div> 
+      <div className="border-top">
         My ID: <span>{id}</span>
       </div>
       <Button onClick={openModal}>
-        New {conversationIsOpen ? 'Conversations' : 'Contact' }
+        New {conversationIsOpen ? 'Conversation' : 'Contact' }
       </Button>
-      </Tab.Container>
       <Modal show={modalIsOpen} onHide={closeModal}>
         {conversationIsOpen ? 
           <NewConversation closeModal={closeModal}/> : 

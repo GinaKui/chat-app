@@ -6,13 +6,12 @@ import { useConversations } from '../contexts/ConversationsProvider'
 
 export default function OpenConversation() {
   const [text, setText] = useState('')
-
+  const { sendMessage, selectedConversation } = useConversations()
   const setRef = useCallback( node => {
     if(node) {
       node.scrollIntoView({ smooth: true })
     }
   }, [])
-  const { sendMessage, selectedConversation } = useConversations()
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -32,14 +31,14 @@ export default function OpenConversation() {
                 className={`my-1 d-flex flex-column ${message.fromMe ? 'align-self-end': ''}`}
               >
                 <div 
-                  className={`rounded px-2 py-1 ${message.fromMe ? 'bg-primary text-white':'border'}`}
+                  className={`rounded px-2 py-1 ${message.fromMe ? 'border bg-light' : 'bg-success text-white'}`}
                 >
                     {message.text}
                 </div>
                 <div
                   className={`text-muted small ${message.fromMe ? 'text-right': ''}`}
                 >
-                  {message.fromMe ? 'You' : message.senderName }
+                  {message.fromMe ? '' : message.senderName }
                 </div>
               </div>
             )
@@ -57,7 +56,7 @@ export default function OpenConversation() {
               style={{height: '75px', resize: "none"}}
             />
             <InputGroup.Append>
-              <Button type="submit">Send</Button>
+              <Button type="submit" variant="success">Send</Button>
             </InputGroup.Append>
           </InputGroup>
         </Form.Group>
