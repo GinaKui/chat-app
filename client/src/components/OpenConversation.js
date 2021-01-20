@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
@@ -7,11 +7,17 @@ import { useConversations } from '../contexts/ConversationsProvider'
 export default function OpenConversation() {
   const [text, setText] = useState('')
   const { sendMessage, selectedConversation } = useConversations()
-  const setRef = useCallback( node => {
+  /* const scrollRef = useCallback( node => {
     if(node) {
+      //this code is also able to scroll to the lastest message
       node.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [])
+  }, []) */
+
+  const scrollRef = useRef();
+  useEffect(() => {
+    scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [selectedConversation])
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -21,42 +27,42 @@ export default function OpenConversation() {
   return (
     <div className="d-flex flex-column flex-grow-1">
       <div className="flex-grow-1 overflow-auto">
-        <div className="d-flex flex-column align-items-start justify-content-end px-3">
+        <div className="d-flex flex-column align-items-start justify-content-start px-3">
           {selectedConversation.messages.map((message, index) => {
             const lastMessage = selectedConversation.messages.length - 1 === index
             return (
               <div
-                ref={lastMessage ? setRef: null}
+                ref={lastMessage ? scrollRef: null}
                 key={index}
                 className={`my-1 d-flex flex-column ${message.fromMe ? 'align-self-end': ''}`}
               >
-                <div 
-                  className={`rounded px-2 py-1 ${message.fromMe ? 'border bg-light' : 'bg-success text-white'}`}
-                >
-                    {message.text}
-                </div>
                 <div
                   className={`text-muted small ${message.fromMe ? 'text-right': ''}`}
                 >
                   {message.fromMe ? '' : message.senderName }
                 </div>
+                <div 
+                  className={`rounded px-2 py-1 ${message.fromMe ? 'border bg-light' : 'bg-success text-white'}`}
+                >
+                    {message.text}
+                </div>  
               </div>
             )
           })}
         </div>
       </div>
       <Form onSubmit={handleSubmit}>
-        <Form.Group className="m-2">
+        <Form.Group className="mx-3 my-4">
           <InputGroup>
             <Form.Control
               as="textarea"
               required
               value={text}
               onChange={e => setText(e.target.value)}
-              style={{height: '75px', resize: "none"}}
+              style={{height: "100px", resize: 'none'}}
             />
             <InputGroup.Append>
-              <Button type="submit" variant="success">Send</Button>
+              <Button type="submit" variant="success" className="mr-3">Send</Button>
             </InputGroup.Append>
           </InputGroup>
         </Form.Group>
