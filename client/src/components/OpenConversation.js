@@ -9,7 +9,7 @@ export default function OpenConversation() {
   const { sendMessage, selectedConversation } = useConversations()
   const setRef = useCallback( node => {
     if(node) {
-      node.scrollIntoView({ smooth: true })
+      node.scrollIntoView({ behavior: 'smooth' })
     }
   }, [])
 
