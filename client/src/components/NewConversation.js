@@ -9,12 +9,12 @@ export default function NewConversation({ closeModal }) {
   const [selectedContactIds, setSelectedContactIds] = useState([]);
   const { contacts } = useContacts();
   const { createConversation } = useConversations();
-  function handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault();
     createConversation(selectedContactIds)
     closeModal()
   }
-  function handleCheckboxChange(contactId) {
+  const handleCheckboxChange = contactId => {
     setSelectedContactIds(prevSelectedContactIds => {
       if(prevSelectedContactIds.includes(contactId)) {
         return prevSelectedContactIds.filter(prevId => {
@@ -27,22 +27,22 @@ export default function NewConversation({ closeModal }) {
   }
   return (
     <>
-    <Modal.Header closeButton>Create Conversation</Modal.Header>
-    <Modal.Body>
-      <Form onSubmit={handleSubmit}>
-        {contacts.map(contact => (
-          <Form.Group controlId={contact.id} key={contact.id}>
-            <Form.Check
-              type="checkbox"
-              value={selectedContactIds.includes(contact.id)}
-              label={contact.name}
-              onChange={() => handleCheckboxChange(contact.id)}
-            />
-          </Form.Group>
-        ))}      
-      <Button type="submit">Create</Button>
-      </Form>
-    </Modal.Body>
-  </>
-  )
+      <Modal.Header closeButton>Create Conversation</Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          {contacts.map(contact => (
+            <Form.Group controlId={contact.id} key={contact.id}>
+              <Form.Check
+                type="checkbox"
+                value={selectedContactIds.includes(contact.id)}
+                label={contact.name}
+                onChange={() => handleCheckboxChange(contact.id)}
+              />
+            </Form.Group>
+          ))}      
+          <Button type="submit">Create</Button>
+        </Form>
+      </Modal.Body>
+    </>
+  );
 }

@@ -14,13 +14,13 @@ const CONTACTS_KEY = "contacts"
 
 export default function Sidebar({ id }) {
   const [activeKey, setActiveKey] = useState(CONVERSATIONS_KEY);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
   const conversationIsOpen = activeKey === CONVERSATIONS_KEY;
   const openModal = () => {
-    setModalIsOpen(true)
+    setModalShow(true)
   }
   const closeModal = () => {
-    setModalIsOpen(false);
+    setModalShow(false);
   }
   return (
     <div className="d-flex flex-column border-right" style={{ maxWidth: '300px' }}>
@@ -40,7 +40,7 @@ export default function Sidebar({ id }) {
       <Button onClick={openModal}>
         New {conversationIsOpen ? 'Conversation' : 'Contact' }
       </Button>
-      <Modal show={modalIsOpen} onHide={closeModal}>
+      <Modal show={modalShow} onHide={closeModal} scrollable={true} size="lg">
         {conversationIsOpen ? 
           <NewConversation closeModal={closeModal}/> : 
           <NewContact closeModal={closeModal}/>
